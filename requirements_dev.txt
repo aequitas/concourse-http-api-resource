@@ -1,0 +1,4 @@
+pylama
+pytest
+isort
+responses
