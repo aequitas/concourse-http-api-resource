@@ -29,7 +29,12 @@ class HTTPResource:
 
     def run(self, command_name: str, json_data: str, command_argument: str):
         """Parse input/arguments, perform requested command return output."""
+
+        # parse input JSON into dict
         data = json.loads(json_data)
+
+        # initialize values with Concourse environment variables
+        environment = {k: v for k, v in os.environ.items() if k.startswith('BUILD_')}
 
         # allow debug logging to console for tests
         if os.environ.get('RESOURCE_DEBUG', False) or data.get('source', {}).get('debug', False):
@@ -43,14 +48,12 @@ class HTTPResource:
         log.debug('args: %s', command_argument)
         log.debug('environment: %s', os.environ)
 
-        # initialize values with Concourse environment variables
-        values = {k: v for k, v in os.environ.items() if k.startswith('BUILD_')}
-
         # combine source and params
         params = data.get('source', {})
         params.update(data.get('params', {}))
 
         # allow also to interpolate params
+        values = environment
         values.update(params)
 
         # apply templating of environment variables onto parameters
@@ -61,7 +64,8 @@ class HTTPResource:
         # return empty version object
         return json.dumps({"version": {}})
 
-    def _interpolate(self, data, values):
+    @classmethod
+    def _interpolate(cls, data, values):
         """Recursively apply values using format on all string key and values in data."""
 
         rendered = {}
@@ -71,10 +75,11 @@ class HTTPResource:
             if isinstance(v, str):
                 v = v.format(**values)
             elif isinstance(v, dict):
-                v = self._interpolate(v, values)
+                v = cls._interpolate(v, values)
 
             rendered[k] = v
 
         return rendered
 
+def main():
     print(HTTPResource().run(os.path.basename(__file__), sys.stdin.read(), sys.argv[1:]))
