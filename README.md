@@ -31,11 +31,13 @@ Currently the only useful action the resource supports is `out`. The actions `in
 
 ### Interpolation
 
-All options support interpolation of variables by using [Python string formatting](https://docs.python.org/3.5/library/stdtypes.html#str.format)
+All options support interpolation of variables by using [Python string formatting](https://docs.python.org/3.5/library/stdtypes.html#str.format).
 
 In short it means variables can be used by using single curly brackets (instead of double for Concourse interpolation). Eg: `Build nr. {BUILD_NAME} passed.`
 
 Build metadata (BUILD_NAME, BUILD_JOB_NAME, BUILD_PIPELINE_NAME and BUILD_ID) are available as well as the merged `source`/`params` objects. Interpolation will happen after merging the two objects.
+
+Be aware that options containing interpolation variables need to be enclosed in double quotes `"`.
 
 See Hipchat below for usage example.
 
@@ -56,10 +58,10 @@ resources:
           uri: https://www.hipchat.com/v2/room/team_room/notification
           method: POST
           headers:
-              Authorization: Bearer {hipchat_token}
+              Authorization: "Bearer {hipchat_token}"
           json:
-              color: {color}
-              message: Build {BUILD_PIPELINE_NAME}{BUILD_JOB_NAME}, nr: {BUILD_NAME} {message}!
+              color: "{color}"
+              message: "Build {BUILD_PIPELINE_NAME}{BUILD_JOB_NAME}, nr: {BUILD_NAME} {message}!"
           hipchat_token: {{HIPCHAT_TOKEN}}
 
 jobs:
