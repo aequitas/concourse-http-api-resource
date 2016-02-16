@@ -32,11 +32,20 @@ Options set in `params` take precedence over options in `source`.
 
 All options support interpolation of variables by using [Python3 formatting](https://docs.python.org/3.5/library/stdtypes.html#str.format)
 
-Build metadata (BUILD_NAME, BUILD_JOB_NAME, BUILD_PIPELINE_NAME and BUILD_ID) are currently the only available values.
+In short it means variables can be used by using single curly brackets (instead of double for Concourse interpolation). Eg: `Build nr. {BUILD_NAME} passed.`
+
+Build metadata (BUILD_NAME, BUILD_JOB_NAME, BUILD_PIPELINE_NAME and BUILD_ID) are available as well as the merged `source`/`params` objects. Interpolation will happen after merging the two objects.
+
+See Hipchat below for usage example.
 
 ## Examples
 
 ### Post notification on HipChat
+
+This example show use of variable interpolation with build metadata and the params dict.
+
+Alsos how the usage of a authentication header using a Concourse variable.
+
 
 ```yaml
 resources:
@@ -47,6 +56,9 @@ resources:
           method: POST
           headers:
               Authorization: Bearer {{HIPCHAT_TOKEN}}
+          json:
+              color: {color}
+              message: Build {BUILD_PIPELINE_NAME}{BUILD_JOB_NAME}, nr: {BUILD_NAME} {message}!
 
 jobs:
     - name: Test and notify
@@ -56,15 +68,12 @@ jobs:
             on_success:
                 put: hipchat
                 params:
-                    json:
-                        color: green
-                        message: Build {BUILD_PIPELINE_NAME}{BUILD_JOB_NAME}, nr: {BUILD_NAME} was a success!
+                    color: green
+                    message: was a success
             on_failure:
                 put: hipchat
                 params:
-                    json:
-                        color: red
-                        message: Build {BUILD_PIPELINE_NAME}{BUILD_JOB_NAME}, nr: {BUILD_NAME} failed horribly!
-
+                    color: red
+                    message: failed horribly
 
 ```

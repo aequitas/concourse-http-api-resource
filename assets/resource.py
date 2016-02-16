@@ -48,6 +48,9 @@ class HTTPResource:
         params = data.get('source', {})
         params.update(data.get('params', {}))
 
+        # allow also to interpolate params
+        values.update(params)
+
         # apply templating of environment variables onto parameters
         rendered_params = self._interpolate(params, values)
 
