@@ -24,6 +24,4 @@ def test_hipchat_notify():
         }
     }
 
-    response_code, text = cmd('out', source, params=params)
-
-    assert response_code == 204
+    cmd('out', source, params=params)
