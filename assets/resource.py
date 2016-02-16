@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
+import json
 import logging as log
 import os
 import sys
-import json
 import tempfile
+
 import requests
+
 
 class HTTPResource:
     """HTTP resource implementation."""
@@ -15,7 +17,7 @@ class HTTPResource:
 
         method = data.get('method', 'GET')
         uri = data['uri']
-        headers = data['headers']
+        headers = data.get('headers', {})
         json = data.get('json', None)
 
         response = requests.request(method, uri, json=json, headers=headers)
@@ -54,8 +56,9 @@ class HTTPResource:
         # apply templating of environment variables onto parameters
         rendered_params = self._interpolate(params, values)
 
-        output = self.cmd(command_argument, rendered_params)
+        self.cmd(command_argument, rendered_params)
 
+        # return empty 'version'
         return json.dumps({})
 
     def _interpolate(self, data, values):

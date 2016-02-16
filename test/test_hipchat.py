@@ -1,6 +1,8 @@
-from helpers import cmd
 import os
+
 import pytest
+
+from helpers import cmd
 
 HIPCHAT_TOKEN = os.environ.get('HIPCHAT_TOKEN')
 

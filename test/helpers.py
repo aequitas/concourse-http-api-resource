@@ -1,7 +1,7 @@
 import json
+import os
 import subprocess
 import sys
-import os
 
 ENVIRONMENT = {
     'BUILD_NAME': '1',
