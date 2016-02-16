@@ -1,6 +1,6 @@
 # HTTP API Resource
 
-Concourse resource to allow interaction with (simple) HTTP API's.
+Concourse resource to allow interaction with (simple) HTTP (REST/JSON) API's. This resource is useful for API's which have simple one request interactions and will not be a one-size-fits-all solution. If your API is more complex [writing your own resource](http://concourse.ci/implementing-resources.html).
 
 https://hub.docker.com/r/aequitas/http-api-resource/
 
