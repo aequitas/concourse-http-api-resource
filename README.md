@@ -1,8 +1,8 @@
-# HTTP Resource
+# HTTP API Resource
 
 Concourse resource to allow interaction with (simple) HTTP API's.
 
-https://hub.docker.com/r/aequitas/http-resource/
+https://hub.docker.com/r/aequitas/http-api-resource/
 
 ## Source Configuration
 
@@ -27,6 +27,7 @@ Options set in `params` take precedence over options in `source`.
 
 ## Behavior
 
+Currently the only useful action the resource supports is `out`. The actions `in` and `check` will be added later.
 
 ### Interpolation
 
