@@ -34,7 +34,7 @@ class HTTPResource:
             log.basicConfig(level=log.DEBUG)
         else:
             logfile = tempfile.NamedTemporaryFile(delete=False)
-            log.basicConfig(level=log.DEBUG, filename=logfile)
+            log.basicConfig(level=log.DEBUG, filename=logfile.name)
 
         log.debug('command: %s', command_name)
         log.debug('input: %s', data)
@@ -56,7 +56,7 @@ class HTTPResource:
 
         output = self.cmd(command_argument, rendered_params)
 
-        return json.dumps(output)
+        return json.dumps({})
 
     def _interpolate(self, data, values):
         """Recursively apply values using format on all string key and values in data."""
