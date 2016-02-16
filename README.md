@@ -31,7 +31,7 @@ Currently the only useful action the resource supports is `out`. The actions `in
 
 ### Interpolation
 
-All options support interpolation of variables by using [Python3 formatting](https://docs.python.org/3.5/library/stdtypes.html#str.format)
+All options support interpolation of variables by using [Python string formatting](https://docs.python.org/3.5/library/stdtypes.html#str.format)
 
 In short it means variables can be used by using single curly brackets (instead of double for Concourse interpolation). Eg: `Build nr. {BUILD_NAME} passed.`
 
@@ -45,21 +45,22 @@ See Hipchat below for usage example.
 
 This example show use of variable interpolation with build metadata and the params dict.
 
-Alsos how the usage of a authentication header using a Concourse variable.
+Also shows how the usage of a authentication header using Concourse variables.
 
 
 ```yaml
 resources:
     - name: hipchat
-      type: http
+      type: http-api
       source:
           uri: https://www.hipchat.com/v2/room/team_room/notification
           method: POST
           headers:
-              Authorization: Bearer {{HIPCHAT_TOKEN}}
+              Authorization: Bearer {hipchat_token}
           json:
               color: {color}
               message: Build {BUILD_PIPELINE_NAME}{BUILD_JOB_NAME}, nr: {BUILD_NAME} {message}!
+          hipchat_token: {{HIPCHAT_TOKEN}}
 
 jobs:
     - name: Test and notify
