@@ -58,8 +58,8 @@ class HTTPResource:
 
         self.cmd(command_argument, rendered_params)
 
-        # return empty 'version'
-        return json.dumps({})
+        # return empty version object
+        return json.dumps({"version": {}})
 
     def _interpolate(self, data, values):
         """Recursively apply values using format on all string key and values in data."""
@@ -77,4 +77,4 @@ class HTTPResource:
 
         return rendered
 
-print(HTTPResource().run(os.path.basename(__file__), sys.stdin.read(), sys.argv[1:]))
+    print(HTTPResource().run(os.path.basename(__file__), sys.stdin.read(), sys.argv[1:]))
