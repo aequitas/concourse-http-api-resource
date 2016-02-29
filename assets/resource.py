@@ -77,4 +77,4 @@ class HTTPResource:
 
         return rendered
 
-    print(HTTPResource().run(os.path.basename(__file__), sys.stdin.read(), sys.argv[1:]))
+print(HTTPResource().run(os.path.basename(__file__), sys.stdin.read(), sys.argv[1:]))
