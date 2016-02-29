@@ -44,7 +44,7 @@ class HTTPResource:
         log.debug('environment: %s', os.environ)
 
         # initialize values with Concourse environment variables
-        values = {k: v for k, v in os.environ.items() if k.startswith('BUILD_')}
+        values = {k: v for k, v in os.environ.items() if k.startswith('BUILD_') or k == 'ATC_EXTERNAL_URL'}
 
         # combine source and params
         params = data.get('source', {})
