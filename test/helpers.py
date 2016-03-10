@@ -8,6 +8,7 @@ ENVIRONMENT = {
     'BUILD_JOB_NAME': 'test-job',
     'BUILD_PIPELINE_NAME': 'test-pipeline',
     'BUILD_ID': '123',
+    'TEST': 'true',
 }
 
 def cmd(cmd_name, source, args: list = [], version={}, params={}):

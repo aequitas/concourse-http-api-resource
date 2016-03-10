@@ -18,16 +18,22 @@ class HTTPResource:
         method = data.get('method', 'GET')
         uri = data['uri']
         headers = data.get('headers', {})
-        json = data.get('json', None)
+        json_data = data.get('json', None)
         ssl_verify = data.get('ssl_verify', True)
         ok_responses = data.get('ok_responses', [200, 201, 202, 204])
+        data_urlencode = data.get('data_urlencode')
 
         if isinstance(ssl_verify, bool):
             verify = ssl_verify
         elif isinstance(ssl_verify, str):
             verify = str(tempfile.NamedTemporaryFile(delete=False, prefix='ssl-').write(verify))
 
-        response = requests.request(method, uri, json=json, headers=headers, verify=verify)
+        request_data = None
+        if data_urlencode:
+            request_data = {k: json.dumps(v) for k, v in data_urlencode.items()}
+
+        response = requests.request(method, uri, json=json_data,
+            data=request_data, headers=headers, verify=verify)
 
         log.info('http response code: %s', response.status_code)
         log.info('http response text: %s', response.text)
@@ -73,10 +79,15 @@ class HTTPResource:
         # apply templating of environment variables onto parameters
         rendered_params = self._interpolate(params, values)
 
-        self.cmd(command_argument, rendered_params)
+        status_code, text = self.cmd(command_argument, rendered_params)
 
         # return empty version object
-        return json.dumps({"version": {}})
+        response = {"version": {}}
+
+        if os.environ.get('TEST', False):
+            response.update(json.loads(text))
+
+        return json.dumps(response)
 
     def _interpolate(self, data, values):
         """Recursively apply values using format on all string key and values in data."""
