@@ -83,3 +83,28 @@ jobs:
                     message: failed horribly
 
 ```
+
+### Trigger build in Jenkins
+
+
+```yaml
+resources:
+    - name: jenkins-trigger-job
+      type: http-api
+      source:
+          uri: https://user:token@jenkins.example.com/job/job_name/build
+          ssl_verify: false
+          form_data:
+              parameter:
+                - name: package
+                  value: test
+
+jobs:
+    - name: Test and notify
+      plan:
+          - task: build
+            file: ci/build.yaml
+
+          - put: jenkins-trigger-job
+
+```

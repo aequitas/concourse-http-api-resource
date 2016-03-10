@@ -1,7 +1,9 @@
 import json
 import subprocess
-from helpers import cmd
+
 import pytest
+
+from helpers import cmd
 
 
 def test_out(httpbin):
@@ -56,7 +58,7 @@ def test_data_urlencode(httpbin):
     source = {
         'uri': httpbin + '/post',
         'method': 'POST',
-        'data_urlencode': {
+        'form_data': {
             'field': {
                 'test': 123,
             },
