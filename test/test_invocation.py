@@ -1,8 +1,8 @@
 import json
 import subprocess
-from urllib.parse import urlparse
 
 import pytest
+
 
 def test_out(httpserver):
     """Test out action with minimal input."""
