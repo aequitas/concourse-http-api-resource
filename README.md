@@ -25,6 +25,8 @@ Options set in `params` take precedence over options in `source`.
 
 * `debug`: *Optional* Set debug logging of scripts, takes boolean (default `false`).
 
+* `ssl_verify`: *Optional* Boolean or SSL CA content (default `true`).
+
 ## Behavior
 
 Currently the only useful action the resource supports is `out`. The actions `in` and `check` will be added later.

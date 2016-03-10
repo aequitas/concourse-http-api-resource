@@ -2,3 +2,4 @@ pylama
 pytest
 isort
 responses
+pytest-localserver

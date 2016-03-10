@@ -19,24 +19,41 @@ class HTTPResource:
         uri = data['uri']
         headers = data.get('headers', {})
         json = data.get('json', None)
+        ssl_verify = data.get('ssl_verify', True)
+        ok_responses = data.get('ok_responses', [200, 201, 202, 204])
 
-        response = requests.request(method, uri, json=json, headers=headers)
+        if isinstance(ssl_verify, bool):
+            verify = ssl_verify
+        elif isinstance(ssl_verify, str):
+            verify = str(tempfile.NamedTemporaryFile(delete=False, prefix='ssl-').write(verify))
+
+        response = requests.request(method, uri, json=json, headers=headers, verify=verify)
 
         log.info('http response code: %s', response.status_code)
         log.info('http response text: %s', response.text)
+
+        if response.status_code not in ok_responses:
+            raise Exception('Unexpected response {}'.format(response.status_code))
 
         return (response.status_code, response.text)
 
     def run(self, command_name: str, json_data: str, command_argument: str):
         """Parse input/arguments, perform requested command return output."""
+
+        with tempfile.NamedTemporaryFile(delete=False, prefix=command_name + '-') as f:
+            f.write(bytes(json_data, 'utf-8'))
+
         data = json.loads(json_data)
 
         # allow debug logging to console for tests
         if os.environ.get('RESOURCE_DEBUG', False) or data.get('source', {}).get('debug', False):
             log.basicConfig(level=log.DEBUG)
         else:
-            logfile = tempfile.NamedTemporaryFile(delete=False)
+            logfile = tempfile.NamedTemporaryFile(delete=False, prefix='log')
             log.basicConfig(level=log.DEBUG, filename=logfile.name)
+            stderr = log.StreamHandler()
+            stderr.setLevel(log.INFO)
+            log.getLogger().addHandler(stderr)
 
         log.debug('command: %s', command_name)
         log.debug('input: %s', data)
