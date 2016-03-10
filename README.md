@@ -21,11 +21,13 @@ Options set in `params` take precedence over options in `source`.
         headers:
             X-Some-Header: some header content
 
-* `json`: *Optional* JSON to send along with the request.
+* `json`: *Optional* JSON to send along with the request, set `application/json` header.
 
 * `debug`: *Optional* Set debug logging of scripts, takes boolean (default `false`).
 
 * `ssl_verify`: *Optional* Boolean or SSL CA content (default `true`).
+
+* `form_data`: *Optional* Dictionary with form field/value pairs to send as data. Values are converted to JSON and URL-encoded.
 
 ## Behavior
 
@@ -86,18 +88,22 @@ jobs:
 
 ### Trigger build in Jenkins
 
+Trigger the job `job_name` with parameter `package` set to `test`.
+
+More info: https://wiki.jenkins-ci.org/display/JENKINS/Remote+access+API#RemoteaccessAPI-Submittingjobs
 
 ```yaml
 resources:
     - name: jenkins-trigger-job
       type: http-api
       source:
-          uri: https://user:token@jenkins.example.com/job/job_name/build
-          ssl_verify: false
+          uri: http://user:token@jenkins.example.com/job/job_name/build
+          method: POST
           form_data:
-              parameter:
-                - name: package
-                  value: test
+              json:
+                  parameter:
+                    - name: package
+                      value: test
 
 jobs:
     - name: Test and notify
