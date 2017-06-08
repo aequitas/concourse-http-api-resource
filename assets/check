@@ -1,0 +1,4 @@
+#!/bin/sh
+
+# empty response to keep Concourse happy
+echo "[]"
