@@ -4,6 +4,11 @@ Concourse resource to allow interaction with (simple) HTTP (REST/JSON) API's. Th
 
 https://hub.docker.com/r/aequitas/http-api-resource/
 
+## Recent changes
+
+- 01-2018 fix concourse 3.1.1 compatibility (@hfinucane)
+- 01-2018 added license
+
 ## Source Configuration
 
 Most of the `source` options can also be used in `params` for the specifc actions. This allows to use a different URL path. For example when a POST and GET use different endpoints.
