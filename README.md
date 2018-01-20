@@ -60,6 +60,13 @@ Also shows how the usage of a authentication header using Concourse variables.
 
 
 ```yaml
+resource_types:
+  - name: http-api
+    type: docker-image
+    source:
+      repository: aequitas/http-api-resource
+      tag: latest
+
 resources:
     - name: hipchat
       type: http-api
