@@ -33,7 +33,7 @@ class HTTPResource:
             request_data = {k: json.dumps(v) for k, v in form_data.items()}
 
         response = requests.request(method, uri, json=json_data,
-            data=request_data, headers=headers, verify=verify)
+                                    data=request_data, headers=headers, verify=verify)
 
         log.info('http response code: %s', response.status_code)
         log.info('http response text: %s', response.text)

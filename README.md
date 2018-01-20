@@ -8,6 +8,7 @@ https://hub.docker.com/r/aequitas/http-api-resource/
 
 - 01-2018 fix concourse 3.1.1 compatibility (@hfinucane)
 - 01-2018 added license
+- 01-2017 recursive interpolate over lists as well
 
 ## Source Configuration
 
