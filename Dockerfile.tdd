@@ -1,4 +1,4 @@
-FROM python:3-alpine
+FROM python:3
 
 # install requirements
 ADD requirements*.txt setup.cfg ./

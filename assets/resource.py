@@ -92,17 +92,15 @@ class HTTPResource:
     def _interpolate(self, data, values):
         """Recursively apply values using format on all string key and values in data."""
 
-        rendered = {}
-        for k, v in data.items():
-            if isinstance(k, str):
-                k = k.format(**values)
-            if isinstance(v, str):
-                v = v.format(**values)
-            elif isinstance(v, dict):
-                v = self._interpolate(v, values)
+        if isinstance(data, str):
+            return data.format(**values)
+        elif isinstance(data, list):
+            return [self._interpolate(x, values) for x in data]
+        elif isinstance(data, dict):
+            return {self._interpolate(k, values): self._interpolate(v, values)
+                    for k, v in data.items()}
+        else:
+            return data
 
-            rendered[k] = v
-
-        return rendered
 
 print(HTTPResource().run(os.path.basename(__file__), sys.stdin.read(), sys.argv[1:]))

@@ -52,6 +52,29 @@ def test_json(httpbin):
 
     assert output['json']['test'] == 123
 
+
+def test_interpolation(httpbin):
+    """Values should be interpolated recursively."""
+
+    source = {
+        'uri': httpbin + '/post',
+        'method': 'POST',
+        'json': {
+            'object': {
+                'test': '{BUILD_NAME}'
+            },
+            'array': [
+                '{BUILD_NAME}'
+            ]
+        },
+    }
+
+    output = cmd('out', source)
+
+    assert output['json']['object']['test'] == '1'
+    assert output['json']['array'][0] == '1'
+
+
 def test_data_urlencode(httpbin):
     """Test passing URL encoded data."""
 
