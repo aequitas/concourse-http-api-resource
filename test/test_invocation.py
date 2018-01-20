@@ -16,6 +16,7 @@ def test_out(httpbin):
     }
     subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
 
+
 def test_out_failure(httpbin):
     """Test action failing if not OK http response."""
 
@@ -27,15 +28,17 @@ def test_out_failure(httpbin):
     with pytest.raises(subprocess.CalledProcessError):
         subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
 
+
 def test_auth(httpbin):
     """Test basic authentication."""
 
     data = {
         'source': {
-            'uri':  'http://user:password@{0.host}:{0.port}/basic-auth/user/password'.format(httpbin),
+            'uri': 'http://user:password@{0.host}:{0.port}/basic-auth/user/password'.format(httpbin),
         }
     }
     subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
+
 
 def test_json(httpbin):
     """Json should be passed as JSON content."""
@@ -73,6 +76,19 @@ def test_interpolation(httpbin):
 
     assert output['json']['object']['test'] == '1'
     assert output['json']['array'][0] == '1'
+
+
+def test_empty_check(httpbin):
+    """Check must return an empty response but not nothing."""
+
+    source = {
+        'uri': httpbin + '/post',
+        'method': 'POST',
+    }
+
+    check = cmd('check', source)
+
+    assert check == []
 
 
 def test_data_urlencode(httpbin):
