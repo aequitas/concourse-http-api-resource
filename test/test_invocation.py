@@ -12,7 +12,8 @@ def test_out(httpbin):
     data = {
         'source': {
             'uri': httpbin + '/status/200',
-        }
+        },
+        'version': {}
     }
     subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
 
@@ -23,7 +24,8 @@ def test_out_failure(httpbin):
     data = {
         'source': {
             'uri': httpbin + '/status/404',
-        }
+        },
+        'version': {}
     }
     with pytest.raises(subprocess.CalledProcessError):
         subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
@@ -35,7 +37,7 @@ def test_auth(httpbin):
     data = {
         'source': {
             'uri': 'http://user:password@{0.host}:{0.port}/basic-auth/user/password'.format(httpbin),
-        }
+        },
     }
     subprocess.check_output('/opt/resource/out', input=json.dumps(data).encode())
 
@@ -49,11 +51,13 @@ def test_json(httpbin):
         'json': {
             'test': 123,
         },
+        'version': {}
     }
 
     output = cmd('out', source)
 
     assert output['json']['test'] == 123
+    assert output['version'] == {}
 
 
 def test_interpolation(httpbin):
@@ -69,13 +73,14 @@ def test_interpolation(httpbin):
             'array': [
                 '{BUILD_NAME}'
             ]
-        },
+        }
     }
 
     output = cmd('out', source)
 
     assert output['json']['object']['test'] == '1'
     assert output['json']['array'][0] == '1'
+    assert output['version'] == {}
 
 
 def test_empty_check(httpbin):
@@ -88,7 +93,7 @@ def test_empty_check(httpbin):
 
     check = cmd('check', source)
 
-    assert check == []
+    assert check['version'] == {}
 
 
 def test_data_urlencode(httpbin):
@@ -101,9 +106,10 @@ def test_data_urlencode(httpbin):
             'field': {
                 'test': 123,
             },
-        },
+        }
     }
 
     output = cmd('out', source)
 
     assert output['form'] == {'field': '{"test": 123}'}
+    assert output['version'] == {}
