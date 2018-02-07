@@ -107,3 +107,21 @@ def test_data_urlencode(httpbin):
     output = cmd('out', source)
 
     assert output['form'] == {'field': '{"test": 123}'}
+
+
+def test_data_ensure_ascii(httpbin):
+    """Test form_data json ensure_ascii."""
+
+    source = {
+        'uri': httpbin + '/post',
+        'method': 'POST',
+        'form_data': {
+            'field': {
+                'test': '日本語',
+            },
+        },
+    }
+
+    output = cmd('out', source)
+
+    assert output['form'] == {'field': '{"test": "日本語"}'}
