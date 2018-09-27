@@ -93,7 +93,7 @@ def test_empty_check(httpbin):
 
     check = cmd('check', source)
 
-    assert check['version'] == {}
+    assert check == []
 
 
 def test_data_urlencode(httpbin):

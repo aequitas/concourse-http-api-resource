@@ -1,4 +1,5 @@
 #!/bin/sh
 
 # empty version to keep Concourse happy
-echo '{"version": {}}'
+# https://concourse-ci.org/implementing-resources.html#resource-check
+echo '[]'

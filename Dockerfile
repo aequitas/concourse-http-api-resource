@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.6
 
 # install requirements
 ADD requirements*.txt setup.cfg ./
