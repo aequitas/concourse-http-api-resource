@@ -6,6 +6,7 @@ https://hub.docker.com/r/aequitas/http-api-resource/
 
 ## Recent changes
 
+- 09-2018 Fix error on check (reporter: @OvermindDL1)
 - 02-2018 Fix build detail load (@scottasmith, reporter: @pranaysharmadelhi)
 - 02-2018 add support for UTF-8 in JSON (@masaki-takano)
 - 01-2018 fix concourse 3.1.1 compatibility (@hfinucane)
